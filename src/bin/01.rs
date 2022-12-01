@@ -54,8 +54,8 @@ pub fn part_two(input: &str) -> Option<u32> {
 
 fn main() {
     let input = &aoc::read_file("inputs", 1);
-    aoc::solve!(1, part_one, input);
-    aoc::solve!(2, part_two, input);
+    aoc::solve!(1, 1, part_one, input);
+    aoc::solve!(1, 2, part_two, input);
 }
 
 #[cfg(test)]

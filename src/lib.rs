@@ -5,6 +5,9 @@
  */
 use std::env;
 use std::fs;
+use std::process::Command;
+use std::io;
+use std::io::Write;
 
 pub mod helpers;
 
@@ -14,12 +17,12 @@ pub const ANSI_RESET: &str = "\x1b[0m";
 
 #[macro_export]
 macro_rules! solve {
-    ($part:expr, $solver:ident, $input:expr) => {{
-        use aoc::{ANSI_BOLD, ANSI_ITALIC, ANSI_RESET};
+    ($day:expr, $part:expr, $solver:ident, $input:expr) => {{
+        use aoc::{ANSI_BOLD, ANSI_ITALIC, ANSI_RESET, submit_result};
         use std::fmt::Display;
         use std::time::Instant;
 
-        fn print_result<T: Display>(func: impl FnOnce(&str) -> Option<T>, input: &str) {
+        fn print_result<T: Display>(func: impl FnOnce(&str) -> Option<T>, input: &str) -> Option<T> {
             let timer = Instant::now();
             let result = func(input);
             let elapsed = timer.elapsed();
@@ -29,16 +32,43 @@ macro_rules! solve {
                         "{} {}(elapsed: {:.2?}){}",
                         result, ANSI_ITALIC, elapsed, ANSI_RESET
                     );
+                    return Some(result);
                 }
                 None => {
-                    println!("not solved.")
+                    println!("not solved.");
+                    return None;
                 }
             }
         }
 
         println!("🎄 {}Part {}{} 🎄", ANSI_BOLD, $part, ANSI_RESET);
-        print_result($solver, $input);
+        let result = print_result($solver, $input);
+        match result {
+            Some(value) => submit_result($day, $part, value),
+            None => {},
+        }
     }};
+}
+
+pub fn submit_result(day: u8, part: i32, result: u32) {
+    println!("\nSubmitting day {}, part {}, result {}", day, part, result);
+
+    let cmd_args: Vec<String> = vec!["submit".to_string(), part.to_string(), result.to_string(), "-d".to_string(), day.to_string()];
+    match Command::new("aoc").args(cmd_args).output() {
+        Ok(cmd_output) => {
+            io::stdout()
+                .write_all(&cmd_output.stdout)
+                .expect("could not write cmd stdout to pipe.");
+            io::stderr()
+                .write_all(&cmd_output.stderr)
+                .expect("could not write cmd stderr to pipe.");
+        }
+        Err(e) => {
+            eprintln!("failed to spawn aoc-cli: {}", e);
+        }
+    }
+
+    println!("\n");
 }
 
 pub fn read_file(folder: &str, day: u8) -> String {

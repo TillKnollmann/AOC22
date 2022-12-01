@@ -18,8 +18,8 @@ pub fn part_two(input: &str) -> Option<u32> {
 
 fn main() {
     let input = &aoc::read_file("inputs", DAY);
-    aoc::solve!(1, part_one, input);
-    aoc::solve!(2, part_two, input);
+    aoc::solve!(DAY, 1, part_one, input);
+    aoc::solve!(DAY, 2, part_two, input);
 }
 
 #[cfg(test)]
