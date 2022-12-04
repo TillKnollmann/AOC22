@@ -1,7 +1,7 @@
 
 /// Returns the 4 u32 values defining the two sections of a pair
 fn parse_sections(input: &str) -> (u32, u32, u32, u32) {
-    let split = input.split(|c| c == ',' || c == '-').collect::<Vec<&str>>();
+    let split = input.split(['-',',']).collect::<Vec<&str>>();
     (split[0].parse::<u32>().unwrap(), split[1].parse::<u32>().unwrap(), split[2].parse::<u32>().unwrap(), split[3].parse::<u32>().unwrap())
 }
 
@@ -16,11 +16,11 @@ fn is_overlapping((a1, a2, b1, b2): (u32, u32, u32, u32)) -> bool {
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
-    Some(input.lines().map(|line| { if is_contained(parse_sections(line)) { return 1; } 0}).sum())
+    Some(input.lines().filter(|line| is_contained(parse_sections(line))).count() as u32)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    Some(input.lines().map(|line| { if is_overlapping(parse_sections(line)) { return 1; } 0}).sum())
+    Some(input.lines().filter(|line| is_overlapping(parse_sections(line))).count() as u32)
 }
 
 fn main() {
