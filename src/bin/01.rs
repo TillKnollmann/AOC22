@@ -16,12 +16,12 @@ impl Elve {
 /// Parses the given string and returns an elve struct
 fn parse_elve (input: &str) -> Elve {
     let mut result = Elve {calories : vec![]};
-    for line in input.split("\n") {
+    for line in input.split('\n') {
         // println!("Line is {:#?}", line.replace("\n", ""));
-        result.calories.push(line.replace("\n", "").parse::<i32>().unwrap());
+        result.calories.push(line.replace('\n', "").parse::<i32>().unwrap());
     }
 
-    return result;
+    result
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
@@ -29,7 +29,7 @@ pub fn part_one(input: &str) -> Option<u32> {
     // Get all elves
     let mut elves: Vec<Elve> = vec![];
 
-    for block in input.replace("\r", "").split("\n\n") {
+    for block in input.replace('\r', "").split("\n\n") {
         // println!("Block is {:#?}", block.replace("\n\n", "").as_str());
         elves.push(parse_elve(block.replace("\n\n", "").as_str()));
     }
@@ -43,7 +43,7 @@ pub fn part_two(input: &str) -> Option<u32> {
     // get all elves
     let mut elves: Vec<Elve> = vec![];
 
-    for block in input.replace("\r", "").split("\n\n") {
+    for block in input.replace('\r', "").split("\n\n") {
         // println!("Block is {:#?}", block.replace("\n\n", "").as_str());
         elves.push(parse_elve(block.replace("\n\n", "").as_str()));
     }
