@@ -71,8 +71,8 @@ fn main() {
     let mut file = match safe_create_file(&module_path) {
         Ok(file) => file,
         Err(e) => {
-            eprintln!("Failed to create module file: {}", e);
-            process::exit(1);
+            eprintln!("Failed to create module file: {}", e.kind());
+            process::exit(0);
         }
     };
 

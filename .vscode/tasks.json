@@ -1,0 +1,107 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Init Task",
+            "group": "none",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Scaffold",
+                "Download",
+                "Open Puzzle",
+                "Open Examples",
+                "Open Source",
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true,
+                "close": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Scaffold",
+            "type": "shell",
+            "command": "cargo scaffold ${input:day}",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+                "close": false
+            },
+        },
+        {
+            "label": "Download",
+            "type": "shell",
+            "command": "cargo download ${input:day} --y 2022",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+                "close": false
+            },
+        },
+        {
+            "label": "Open Puzzle",
+            "type": "shell",
+            "command": "${workspaceFolder}/src/puzzles/${input:day}.md;code -r ${workspaceFolder}/src/puzzles/${input:day}.md",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+                "close": false
+            },
+        },
+        {
+            "label": "Open Source",
+            "type": "shell",
+            "command": "${workspaceFolder}/src/bin/${input:day}.rs;code -r ${workspaceFolder}/src/bin/${input:day}.rs",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+                "close": false
+            },
+        },
+        {
+            "label": "Open Examples",
+            "type": "shell",
+            "command": "${workspaceFolder}/src/examples/${input:day}.txt;code -r ${workspaceFolder}/src/examples/${input:day}.txt",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+                "close": true
+            },
+        },
+    ],
+      "inputs": [
+        {
+            "id": "day",
+            "description": "Day:",
+            "default": "00",
+            "type": "promptString"
+        }
+    ]
+}
