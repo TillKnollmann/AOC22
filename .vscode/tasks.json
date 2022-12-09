@@ -12,7 +12,26 @@
                 "Download",
                 "Open Puzzle",
                 "Open Examples",
-                "Open Source",
+                "Open Source"
+            ],
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": true,
+                "close": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Refresh Task",
+            "group": "none",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Download",
+                "Refresh Markdown"
             ],
             "presentation": {
                 "echo": true,
@@ -37,7 +56,7 @@
                 "showReuseMessage": false,
                 "clear": false,
                 "close": false
-            },
+            }
         },
         {
             "label": "Download",
@@ -51,7 +70,7 @@
                 "showReuseMessage": false,
                 "clear": false,
                 "close": false
-            },
+            }
         },
         {
             "label": "Open Puzzle",
@@ -65,7 +84,7 @@
                 "showReuseMessage": false,
                 "clear": false,
                 "close": false
-            },
+            }
         },
         {
             "label": "Open Source",
@@ -79,7 +98,7 @@
                 "showReuseMessage": false,
                 "clear": false,
                 "close": false
-            },
+            }
         },
         {
             "label": "Open Examples",
@@ -93,8 +112,23 @@
                 "showReuseMessage": false,
                 "clear": false,
                 "close": true
-            },
+            }
         },
+        {
+            "label": "Refresh Markdown",
+            "type": "shell",
+            "command": "${command:markdown.preview.refresh}",
+            "presentation": {
+                "echo": true,
+                "reveal": "never",
+                "focus": false,
+                "panel": "shared",
+                "showReuseMessage": false,
+                "clear": false,
+                "close": false
+            },
+            "problemMatcher": []
+        }
     ],
       "inputs": [
         {
