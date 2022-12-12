@@ -109,16 +109,12 @@ mod tests {
     #[test]
     fn test_part_one() {
         let input_ex = aoc::read_file("examples", 12);
-        let input_in = aoc::read_file("inputs", 12);
         assert_eq!(part_one(&input_ex), Some(31));
-        assert_eq!(part_one(&input_in), Some(456));
     }
 
     #[test]
     fn test_part_two() {
         let input_ex = aoc::read_file("examples", 12);
-        let input_in = aoc::read_file("inputs", 12);
         assert_eq!(part_two(&input_ex), Some(29));
-        assert_eq!(part_two(&input_in), Some(454));
     }
 }
