@@ -91,7 +91,7 @@ fn simulate_valve_run(input: &str, limit: usize, use_elephant: bool) -> Option<u
     // get relevant nodes
     let relevant_nodes = get_relevant_nodes(&valves);
 
-    // get solution to flyod warshall on graph
+    // get solution to Floyd Warshall on graph
     let solution = petgraph::algo::floyd_warshall(&graph, |_| 1).unwrap();
 
     // state_space is a vector of size 31 x relevant_nodes.len() x 2^relevant_nodes.len()
