@@ -217,11 +217,7 @@ fn get_example_monkeys(func: fn(usize) -> usize) -> Vec<Monkey> {
             }),
             modification: relief,
              throw: Box::new(|item: usize| {
-                if item % 17 == 0 {
-                    0
-                } else {
-                    1
-                }
+                usize::from(item % 17 != 0)
             }),
             inspection_count: 0,
         },

@@ -119,7 +119,7 @@ fn simulate_rock(
                 .unwrap()
         })
         .max()
-        .unwrap() as usize;
+        .unwrap();
 
     (cave, new_height, push[command_idx + 1..].to_vec())
 }

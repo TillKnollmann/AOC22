@@ -139,7 +139,7 @@ fn simulate_valve_run(input: &str, limit: usize, use_elephant: bool) -> Option<u
                     // current valve was opened, can only get the best by moving
                     value = relevant_nodes.iter().enumerate().map( |(idx, dst)| {
                         if idx != j && solution.get(&(*node, *dst)).unwrap() <= &(i as u32) {
-                            *state_space[i as usize - *solution.get(&(*node, *dst)).unwrap() as usize][idx].get(&vec).unwrap()
+                            *state_space[i - *solution.get(&(*node, *dst)).unwrap() as usize][idx].get(&vec).unwrap()
                         } else {
                             0
                         }
@@ -147,7 +147,7 @@ fn simulate_valve_run(input: &str, limit: usize, use_elephant: bool) -> Option<u
                 } else {
                     let not_opened = relevant_nodes.iter().enumerate().map( |(idx, dst)| {
                         if idx != j && solution.get(&(*node, *dst)).unwrap() <= &(i as u32) {
-                            *state_space[i as usize - *solution.get(&(*node, *dst)).unwrap() as usize][idx].get(&vec).unwrap()
+                            *state_space[i - *solution.get(&(*node, *dst)).unwrap() as usize][idx].get(&vec).unwrap()
                         } else {
                             0
                         }
@@ -156,7 +156,7 @@ fn simulate_valve_run(input: &str, limit: usize, use_elephant: bool) -> Option<u
                     opened_state[j] = 1;
                     let opened = relevant_nodes.iter().enumerate().map( |(idx, dst)| {
                         if idx != j && *solution.get(&(*node, *dst)).unwrap() < (i as u32) {
-                            *state_space[i as usize - 1 - *solution.get(&(*node, *dst)).unwrap() as usize][idx].get(&opened_state).unwrap()
+                            *state_space[i - 1 - *solution.get(&(*node, *dst)).unwrap() as usize][idx].get(&opened_state).unwrap()
                         } else {
                             0
                         }
@@ -171,17 +171,17 @@ fn simulate_valve_run(input: &str, limit: usize, use_elephant: bool) -> Option<u
     }
     if ! use_elephant {
         // when no elephant is used, we can just return the maximum value in the last state for valve AA
-        Some(*(state_space[30][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap() as usize].values().max().unwrap()))
+        Some(*(state_space[30][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap()].values().max().unwrap()))
     } else {
         // when an elephant is used, we have to check all possible combinations of final states and add the release flow if the elephant opened disjoint valves
-        let to_check = state_space[limit][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap() as usize].len().pow(2) as u64;
+        let to_check = state_space[limit][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap()].len().pow(2) as u64;
         println!("\nChecking {} state combinations", to_check);
         let pb = indicatif::ProgressBar::new(to_check);
             pb.set_style(ProgressStyle::with_template("[{eta_precise}] {bar:40.cyan/blue} {pos:>7}/{len:7} {msg}")
         .unwrap()
         .progress_chars("##-"));
 
-        state_space[limit][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap() as usize].iter().cartesian_product(state_space[limit][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap() as usize].iter()).filter_map(|((state_1, val1), (state_2, val2))| {
+        state_space[limit][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap()].iter().cartesian_product(state_space[limit][relevant_nodes.iter().enumerate().find_map(|(idx, name)| if *name == "AA" {Some(idx)} else {None}).unwrap()].iter()).filter_map(|((state_1, val1), (state_2, val2))| {
             pb.inc(1);
             if states_are_compatible(state_1, state_2) {
                 Some(val1 + val2)
