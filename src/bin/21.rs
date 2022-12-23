@@ -86,9 +86,9 @@ fn get_equation(monkeys: &HashMap<String, Monkey>) -> String {
     let left_val = get_human_equation(monkeys, left_child);
     let right_val = get_human_equation(monkeys, right_child);
 
-    let equation = if left_val.contains("x") {left_val.clone()} else {right_val};
+    let equation = if left_val.contains('x') {left_val.clone()} else {right_val};
 
-    let value = if left_val.contains("x") {calculate(monkeys, right_child)} else {calculate(monkeys, left_child)};
+    let value = if left_val.contains('x') {calculate(monkeys, right_child)} else {calculate(monkeys, left_child)};
 
     format!("{} = {}", equation, value)
 }
