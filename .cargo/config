@@ -3,4 +3,4 @@ scaffold = "run --release --bin scaffold -- "
 download = "run --release --bin download -- "
 
 solve = "run --release --bin"
-all = "run"
+all = "run --release"

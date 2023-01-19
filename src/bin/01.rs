@@ -18,6 +18,9 @@ fn parse_elve (input: &str) -> Elve {
     let mut result = Elve {calories : vec![]};
     for line in input.split('\n') {
         // println!("Line is {:#?}", line.replace("\n", ""));
+        if line.is_empty() {
+            continue;
+        }
         result.calories.push(line.replace('\n', "").parse::<i32>().unwrap());
     }
 
