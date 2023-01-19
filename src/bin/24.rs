@@ -7,6 +7,7 @@ struct Blizzard {
     dir: u8,
 }
 
+/// Parses the input and returns the maximum x and y and a set of blizzards
 fn parse_input(input: &str) -> (u32, u32, HashSet<Blizzard>) {
     // get number of lines as y and number of chars in first line as x
     let mut y: u32 = 0;
@@ -42,6 +43,7 @@ fn parse_input(input: &str) -> (u32, u32, HashSet<Blizzard>) {
     (x, y, blizzards)
 }
 
+/// Moves a blizzard and returns the new blizzard
 fn move_blizzard(blizzard: Blizzard, x: u32, y: u32) -> Blizzard {
     let mut blizzard = blizzard;
     match blizzard.dir {
@@ -78,6 +80,7 @@ fn move_blizzard(blizzard: Blizzard, x: u32, y: u32) -> Blizzard {
     blizzard
 }
 
+/// Moves all blizzards and returns the new blizzards
 fn move_all_blizzards(blizzards: HashSet<Blizzard>, x: u32, y: u32) -> HashSet<Blizzard> {
     let mut new_blizzards = HashSet::new();
     for blizzard in blizzards {
@@ -86,21 +89,22 @@ fn move_all_blizzards(blizzards: HashSet<Blizzard>, x: u32, y: u32) -> HashSet<B
     new_blizzards
 }
 
+/// Simulates one round of blizzards moving and returns the new blizzards, the possible positions to go to and the minute
 fn simulate_round(
     blizzards: HashSet<Blizzard>,
     max_x: u32,
     max_y: u32,
-    visited: HashSet<(u32, u32)>,
-) -> (HashSet<Blizzard>, HashSet<(u32, u32)>) {
+    visited: HashSet<(u32, u32)>, (initial_x, initial_y): (u32, u32), minute: u32,
+) -> (HashSet<Blizzard>, HashSet<(u32, u32)>, u32) {
     let new_blizzards = move_all_blizzards(blizzards, max_x, max_y);
     let mut possible = HashSet::new();
-    // if no blizzard is at the starting position, add it to the visited set
-    if !new_blizzards.contains(&Blizzard { x: 0, y: 0, dir: 0 })
-        && !new_blizzards.contains(&Blizzard { x: 0, y: 0, dir: 1 })
-        && !new_blizzards.contains(&Blizzard { x: 0, y: 0, dir: 2 })
-        && !new_blizzards.contains(&Blizzard { x: 0, y: 0, dir: 3 })
+    // if no blizzard is at the starting position, add it to the possible set
+    if !new_blizzards.contains(&Blizzard { x: initial_x, y: initial_y, dir: 0 })
+        && !new_blizzards.contains(&Blizzard { x: initial_x, y: initial_y, dir: 1 })
+        && !new_blizzards.contains(&Blizzard { x: initial_x, y: initial_y, dir: 2 })
+        && !new_blizzards.contains(&Blizzard { x: initial_x, y: initial_y, dir: 3 })
     {
-        possible.insert((0, 0));
+        possible.insert((initial_x, initial_y));
     }
     // consider all positions of visited
     for (x, y) in visited {
@@ -124,9 +128,8 @@ fn simulate_round(
     for blizzard in new_blizzards.clone() {
         possible.remove(&(blizzard.x, blizzard.y));
     }
-    // set visited to possible
 
-    (new_blizzards, possible)
+    (new_blizzards, possible, minute+1)
 }
 
 pub fn part_one(input: &str) -> Option<u32> {
@@ -138,20 +141,68 @@ pub fn part_one(input: &str) -> Option<u32> {
 
     let mut minute = 0;
 
+    let initial = (0,0);
+
     // loop until visited contains x, y
     while !visited.contains(&(max_x, max_y)) {
-        // simulate a round
-        let (new_blizzards, new_visited) = simulate_round(blizzards.clone(), max_x, max_y, visited.clone());
-        blizzards = new_blizzards;
-        visited = new_visited;
-        minute += 1;
+        (blizzards, visited, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
     }
 
-    Some(minute + 1)
+    // simulate one more round
+    (_, _, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+
+    Some(minute)
 }
 
 pub fn part_two(input: &str) -> Option<u32> {
-    None
+    // parse the input
+    let (max_x, max_y, mut blizzards) = parse_input(input);
+
+    // create a set of visited positions
+    let mut visited = HashSet::new();
+
+    let mut minute = 0;
+
+    let initial = (0,0);
+
+    // loop until visited contains x_max, y_max
+    while !visited.contains(&(max_x, max_y)) {
+        // simulate a round
+        (blizzards, visited, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+    }
+
+    (blizzards, visited, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+
+    // clear the visited set
+    visited.clear();
+
+    // set initial
+    let initial = (max_x, max_y);
+
+    // loop until visited contains 0, 0
+    while !visited.contains(&(0, 0)) {
+        // simulate a round
+        (blizzards, visited, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+    }
+
+    // add 1 minute for the last move
+    (blizzards, visited, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+    // clear the visited set
+    visited.clear();
+
+    // set initial
+    let initial = (0, 0);
+
+    // loop until visited contains x_max, y_max
+    while !visited.contains(&(max_x, max_y)) {
+        // simulate a round
+        (blizzards, visited, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+    }
+
+    // add 1 minute for the last move
+    (_, _, minute) = simulate_round(blizzards, max_x, max_y, visited, initial, minute);
+
+    Some(minute)
 }
 
 fn main() {
@@ -173,6 +224,6 @@ mod tests {
     #[test]
     fn test_part_two() {
         let input = aoc::read_file("examples", 24);
-        assert_eq!(part_two(&input), None);
+        assert_eq!(part_two(&input), Some(54));
     }
 }
