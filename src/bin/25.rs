@@ -1,6 +1,6 @@
 use itertools::Itertools;
 
-
+/// Converts a snafu number to a decimal number
 fn _snafu_to_decimal(snafu_number: &str) -> usize {
     let mut decimal_number: i64 = 0;
     let mut power = 0;
@@ -18,6 +18,7 @@ fn _snafu_to_decimal(snafu_number: &str) -> usize {
     decimal_number as usize
 }
 
+/// adds two snafu numbers and returns the result as a snafu number
 fn add_snafus(snafu_1: String, snafu_2: String) -> String {
     // add both snafu numbers and return the result without converting to decimal
     let mut result = String::new();
