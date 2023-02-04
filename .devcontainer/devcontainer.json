@@ -1,0 +1,31 @@
+{
+    "name": "Rust",
+    "dockerComposeFile": ["docker-compose.yml"],
+    "service": "vscode",
+    "runServices": ["vscode"],
+    "shutdownAction": "stopCompose",
+    "postCreateCommand": "~/.windows.sh",
+    "workspaceFolder": "/AOC22",
+    "extensions": [
+		"rust-lang.rust-analyzer",
+		"alefragnani.Bookmarks",
+		"streetsidesoftware.code-spell-checker",
+		"vadimcn.vscode-lldb",
+		"serayuzgur.crates",
+		"streetsidesoftware.code-spell-checker-german",
+		"donjayamanne.githistory",
+		"GitHub.copilot",
+		"christian-kohler.path-intellisense",
+		"esbenp.prettier-vscode",
+		"wayou.vscode-todo-highlight"
+	],
+    "settings": {
+        "files.eol": "\n",
+        "[rust]": {
+            "editor.defaultFormatter": "rust-lang.rust-analyzer",
+            "editor.formatOnSave": true
+        },
+        "editor.codeActionsOnSaveTimeout": 3000,
+        "rust-analyzer.serverPath": "/usr/local/bin/rust-analyzer"
+    }
+}
